@@ -1,5 +1,7 @@
 package com.ecommerce.catalog_service.controller;
 
+import com.ecommerce.catalog_service.dto.CatalogDto;
+import com.ecommerce.catalog_service.dto.CatalogStockDto;
 import com.ecommerce.catalog_service.entity.CatalogEntity;
 import com.ecommerce.catalog_service.service.CatalogService;
 import com.ecommerce.catalog_service.vo.ResponseCatalog;
@@ -8,9 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,5 +40,33 @@ public class CatalogController {
         });
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @PostMapping("/catalogs/{productId}/stock/increase")
+    public ResponseEntity<ResponseCatalog> increaseStock(@PathVariable("productId") String productId, @RequestBody CatalogStockDto catalogStockDto) {
+        Integer stock = catalogStockDto.getStock();
+
+        CatalogDto catalogDto = catalogService.increaseStock(productId, stock);
+
+        ResponseCatalog response = modelMapper.map(catalogDto, ResponseCatalog.class);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PostMapping("/catalogs/{productId}/stock/decrease")
+    public ResponseEntity<ResponseCatalog> decreaseStock(@PathVariable("productId") String productId, @RequestBody CatalogStockDto catalogStockDto) {
+        Integer stock = catalogStockDto.getStock();
+        CatalogDto catalogDto = catalogService.decreaseStock(productId, stock);
+        ResponseCatalog response = modelMapper.map(catalogDto, ResponseCatalog.class);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/catalogs/{productId}")
+    public ResponseEntity<ResponseCatalog> getCatalog(@PathVariable("productId") String productId) {
+        CatalogDto catalogDto = catalogService.getCatalogByProductId(productId);
+        ResponseCatalog response = modelMapper.map(catalogDto, ResponseCatalog.class);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

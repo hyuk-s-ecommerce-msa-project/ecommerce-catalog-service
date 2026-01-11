@@ -11,5 +11,6 @@ public class ResponseCatalog {
     private String productId;
     private String productName;
     private Integer price;
+    private Integer stock;
     private LocalDateTime createdAt;
 }

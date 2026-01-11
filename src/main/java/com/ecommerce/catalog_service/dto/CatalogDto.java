@@ -6,6 +6,7 @@ import lombok.Data;
 public class CatalogDto {
     private String productId;
     private Integer price;
+    private Integer stock;
 
     private String orderId;
     private String userId;
