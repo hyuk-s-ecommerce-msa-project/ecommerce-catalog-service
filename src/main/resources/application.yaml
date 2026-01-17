@@ -2,6 +2,8 @@ server:
   port: 0
 
 spring:
+  config:
+    import: "optional:file:.env[.properties]"
   application:
     name: catalog-service
   h2:
@@ -17,10 +19,10 @@ spring:
     password:
   jpa:
     hibernate:
+      default_batch_fetch_size: 100
       ddl-auto: create-drop
     show-sql: true
     database: h2
-    defer-datasource-initialization: true
 
 eureka:
   instance:
@@ -34,3 +36,6 @@ eureka:
 logging:
   level:
     org.springframework.security: DEBUG
+
+steam:
+  key: ${STEAM_KEY}

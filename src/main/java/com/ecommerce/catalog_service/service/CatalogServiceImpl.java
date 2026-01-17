@@ -1,7 +1,10 @@
 package com.ecommerce.catalog_service.service;
 
 import com.ecommerce.catalog_service.dto.CatalogDto;
+import com.ecommerce.catalog_service.entity.CatalogCategoryEntity;
 import com.ecommerce.catalog_service.entity.CatalogEntity;
+import com.ecommerce.catalog_service.entity.CatalogGenreEntity;
+import com.ecommerce.catalog_service.entity.CatalogImageEntity;
 import com.ecommerce.catalog_service.exception.InvalidStockQuantityException;
 import com.ecommerce.catalog_service.repository.CatalogRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -32,7 +35,7 @@ public class CatalogServiceImpl implements CatalogService {
             throw new EntityNotFoundException("Product not found");
         }
 
-        return modelMapper.map(catalogEntity, CatalogDto.class);
+        return convertEntityToDto(catalogEntity);
     }
 
     @Override
@@ -46,7 +49,7 @@ public class CatalogServiceImpl implements CatalogService {
 
         catalogEntity.increaseStock(stock);
 
-        return modelMapper.map(catalogEntity, CatalogDto.class);
+        return convertEntityToDto(catalogEntity);
     }
 
     @Override
@@ -64,11 +67,24 @@ public class CatalogServiceImpl implements CatalogService {
 
         catalogEntity.decreaseStock(stock);
 
-        return modelMapper.map(catalogEntity, CatalogDto.class);
+        return convertEntityToDto(catalogEntity);
     }
 
     @Override
-    public Iterable<CatalogEntity> getAllCatalogs() {
+    public List<CatalogEntity> getAllCatalogs() {
         return catalogRepository.findAll();
+    }
+
+    private CatalogDto convertEntityToDto(CatalogEntity entity) {
+        CatalogDto dto = modelMapper.map(entity, CatalogDto.class);
+
+        dto.setImages(entity.getImages().stream()
+                .map(CatalogImageEntity::getImageUrl).toList());
+        dto.setGenres(entity.getGenres().stream()
+                .map(CatalogGenreEntity::getGenreName).toList());
+        dto.setCategories(entity.getCategories().stream()
+                .map(CatalogCategoryEntity::getCategoryName).toList());
+
+        return dto;
     }
 }

@@ -2,8 +2,10 @@ package com.ecommerce.catalog_service.controller;
 
 import com.ecommerce.catalog_service.dto.CatalogDto;
 import com.ecommerce.catalog_service.dto.CatalogStockDto;
+import com.ecommerce.catalog_service.dto.SteamAppListResponse;
 import com.ecommerce.catalog_service.entity.CatalogEntity;
 import com.ecommerce.catalog_service.service.CatalogService;
+import com.ecommerce.catalog_service.service.SteamApiService;
 import com.ecommerce.catalog_service.vo.ResponseCatalog;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -20,6 +22,7 @@ import java.util.List;
 @RequestMapping("/catalog-service")
 public class CatalogController {
     private final CatalogService catalogService;
+    private final SteamApiService steamApiService;
     private final Environment env;
     private final ModelMapper modelMapper;
 
@@ -36,7 +39,8 @@ public class CatalogController {
         List<ResponseCatalog> result = new ArrayList<>();
 
         catalogList.forEach(catalog -> {
-            result.add(modelMapper.map(catalog, ResponseCatalog.class));
+            CatalogDto dto = catalogService.getCatalogByProductId(catalog.getProductId());
+            result.add(modelMapper.map(dto, ResponseCatalog.class));
         });
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -44,9 +48,7 @@ public class CatalogController {
 
     @PostMapping("/catalogs/{productId}/stock/increase")
     public ResponseEntity<ResponseCatalog> increaseStock(@PathVariable("productId") String productId, @RequestBody CatalogStockDto catalogStockDto) {
-        Integer stock = catalogStockDto.getStock();
-
-        CatalogDto catalogDto = catalogService.increaseStock(productId, stock);
+        CatalogDto catalogDto = catalogService.increaseStock(productId, catalogStockDto.getStock());
 
         ResponseCatalog response = modelMapper.map(catalogDto, ResponseCatalog.class);
 
@@ -55,8 +57,7 @@ public class CatalogController {
 
     @PostMapping("/catalogs/{productId}/stock/decrease")
     public ResponseEntity<ResponseCatalog> decreaseStock(@PathVariable("productId") String productId, @RequestBody CatalogStockDto catalogStockDto) {
-        Integer stock = catalogStockDto.getStock();
-        CatalogDto catalogDto = catalogService.decreaseStock(productId, stock);
+        CatalogDto catalogDto = catalogService.decreaseStock(productId, catalogStockDto.getStock());
         ResponseCatalog response = modelMapper.map(catalogDto, ResponseCatalog.class);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -68,5 +69,12 @@ public class CatalogController {
         ResponseCatalog response = modelMapper.map(catalogDto, ResponseCatalog.class);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/steam/data")
+    public ResponseEntity<List<SteamAppListResponse.SteamAppDto>> getSteamAppList() {
+        List<SteamAppListResponse.SteamAppDto> data = steamApiService.fetchSteamApps();
+
+        return ResponseEntity.status(HttpStatus.OK).body(data);
     }
 }
