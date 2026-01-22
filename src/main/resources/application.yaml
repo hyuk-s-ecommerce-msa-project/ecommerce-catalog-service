@@ -42,9 +42,6 @@ logging:
   level:
     org.springframework.security: DEBUG
 
-steam:
-  key: ${STEAM_KEY}
-
 management:
   endpoints:
     web:
