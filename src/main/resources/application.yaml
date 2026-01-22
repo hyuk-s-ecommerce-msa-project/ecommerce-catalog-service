@@ -44,3 +44,12 @@ logging:
 
 steam:
   key: ${STEAM_KEY}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - beans
+          - info
