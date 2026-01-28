@@ -30,6 +30,8 @@ public class CatalogEntity {
     private Integer price;
     @Column(nullable = false)
     private Integer stock;
+    @Column(nullable = false)
+    private String headerImage;
 
     @Lob
     @Column(columnDefinition = "TEXT")
@@ -65,12 +67,13 @@ public class CatalogEntity {
     }
 
     public static CatalogEntity createCatalog(String productId, String productName, Integer price,
-                                              Integer stock, String detailDescription, String releaseDate) {
+                                              Integer stock, String headerImage, String detailDescription, String releaseDate) {
         CatalogEntity catalog = new CatalogEntity();
         catalog.productId = productId;
         catalog.productName = productName;
         catalog.price = price;
         catalog.stock = stock;
+        catalog.headerImage = headerImage;
         catalog.detailDescription = detailDescription;
         catalog.releaseDate = releaseDate;
         return catalog;

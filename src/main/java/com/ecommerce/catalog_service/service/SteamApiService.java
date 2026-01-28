@@ -75,6 +75,7 @@ public class SteamApiService {
                     apiData.getName(),
                     finalPrice,
                     100,
+                    apiData.getHeaderImage(),
                     apiData.getDetailedDescription(),
                     releaseDate
             );

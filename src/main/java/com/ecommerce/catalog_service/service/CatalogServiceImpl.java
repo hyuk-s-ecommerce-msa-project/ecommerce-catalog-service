@@ -28,6 +28,13 @@ public class CatalogServiceImpl implements CatalogService {
     private final Environment env;
 
     @Override
+    public List<CatalogDto> getCatalogByProductIds(List<String> productIds) {
+        List<CatalogEntity> catalogEntities = catalogRepository.findByProductIdIn(productIds);
+
+        return catalogEntities.stream().map(this::convertEntityToDto).toList();
+    }
+
+    @Override
     public CatalogDto getCatalogByProductId(String productId) {
         CatalogEntity catalogEntity = catalogRepository.findByProductId(productId);
 

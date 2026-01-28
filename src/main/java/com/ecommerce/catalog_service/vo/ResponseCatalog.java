@@ -13,6 +13,7 @@ public class ResponseCatalog {
     private String productName;
     private Integer price;
     private Integer stock;
+    private String headerImage;
     private String detailDescription;
     private String releaseDate;
 

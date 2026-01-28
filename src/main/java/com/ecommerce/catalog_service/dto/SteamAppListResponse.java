@@ -42,6 +42,8 @@ public class SteamAppListResponse {
             private List<Screenshot> screenshots;
             private List<Genre> genres;
             private List<Category> categories;
+            @JsonProperty("header_image")
+            private String headerImage;
         }
 
         @Getter

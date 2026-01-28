@@ -77,4 +77,13 @@ public class CatalogController {
 
         return ResponseEntity.status(HttpStatus.OK).body(data);
     }
+
+    @PostMapping("/catalogs/queries")
+    public ResponseEntity<List<ResponseCatalog>> getCatalogsByProductIds(@RequestBody List<String> productIds) {
+        List<CatalogDto> catalogDtoList = catalogService.getCatalogByProductIds(productIds);
+
+        List<ResponseCatalog> response = catalogDtoList.stream().map(v -> modelMapper.map(v, ResponseCatalog.class)).toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }

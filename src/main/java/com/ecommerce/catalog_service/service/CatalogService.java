@@ -10,4 +10,5 @@ public interface CatalogService {
     CatalogDto getCatalogByProductId(String productId);
     CatalogDto increaseStock(String productId, Integer stock);
     CatalogDto decreaseStock(String productId, Integer stock);
+    List<CatalogDto> getCatalogByProductIds(List<String> productIds);
 }

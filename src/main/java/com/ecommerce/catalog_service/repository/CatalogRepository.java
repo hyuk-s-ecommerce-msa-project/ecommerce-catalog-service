@@ -13,4 +13,7 @@ public interface CatalogRepository extends CrudRepository<CatalogEntity, Long> {
     @Override
     @EntityGraph(attributePaths = {"images"})
     List<CatalogEntity> findAll();
+
+    @EntityGraph(attributePaths = {"images"})
+    List<CatalogEntity> findByProductIdIn(List<String> productIds);
 }
