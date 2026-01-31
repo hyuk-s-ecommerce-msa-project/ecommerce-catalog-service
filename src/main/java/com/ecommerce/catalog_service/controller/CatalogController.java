@@ -55,7 +55,7 @@ public class CatalogController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PostMapping("/catalogs/{productId}/stock/decrease")
+    @PostMapping("/catalogs/stock/decrease")
     public ResponseEntity<List<ResponseCatalog>> decreaseStock(@RequestBody List<String> productIds) {
         List<CatalogDto> catalogDto = catalogService.decreaseStock(productIds);
 
