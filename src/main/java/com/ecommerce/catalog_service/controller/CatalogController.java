@@ -46,19 +46,20 @@ public class CatalogController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @PostMapping("/catalogs/{productId}/stock/increase")
-    public ResponseEntity<ResponseCatalog> increaseStock(@PathVariable("productId") String productId, @RequestBody CatalogStockDto catalogStockDto) {
-        CatalogDto catalogDto = catalogService.increaseStock(productId, catalogStockDto.getStock());
+    @PostMapping("/catalogs/stock/increase")
+    public ResponseEntity<List<ResponseCatalog>> increaseStock(@RequestBody List<String> productIds) {
+        List<CatalogDto> catalogDto = catalogService.increaseStock(productIds);
 
-        ResponseCatalog response = modelMapper.map(catalogDto, ResponseCatalog.class);
+        List<ResponseCatalog> response = catalogDto.stream().map(dto -> modelMapper.map(dto, ResponseCatalog.class)).toList();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping("/catalogs/{productId}/stock/decrease")
-    public ResponseEntity<ResponseCatalog> decreaseStock(@PathVariable("productId") String productId, @RequestBody CatalogStockDto catalogStockDto) {
-        CatalogDto catalogDto = catalogService.decreaseStock(productId, catalogStockDto.getStock());
-        ResponseCatalog response = modelMapper.map(catalogDto, ResponseCatalog.class);
+    public ResponseEntity<List<ResponseCatalog>> decreaseStock(@RequestBody List<String> productIds) {
+        List<CatalogDto> catalogDto = catalogService.decreaseStock(productIds);
+
+        List<ResponseCatalog> response = catalogDto.stream().map(dto -> modelMapper.map(dto, ResponseCatalog.class)).toList();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

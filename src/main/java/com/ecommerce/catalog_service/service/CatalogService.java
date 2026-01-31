@@ -8,7 +8,7 @@ import java.util.List;
 public interface CatalogService {
     Iterable<CatalogEntity> getAllCatalogs();
     CatalogDto getCatalogByProductId(String productId);
-    CatalogDto increaseStock(String productId, Integer stock);
-    CatalogDto decreaseStock(String productId, Integer stock);
+    List<CatalogDto> increaseStock(List<String> productIds);
+    List<CatalogDto> decreaseStock(List<String> productIds);
     List<CatalogDto> getCatalogByProductIds(List<String> productIds);
 }

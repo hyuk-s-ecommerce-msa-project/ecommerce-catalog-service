@@ -47,34 +47,30 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     @Transactional
-    public CatalogDto increaseStock(String productId, Integer stock) {
-        CatalogEntity catalogEntity = catalogRepository.findByProductId(productId);
+    public List<CatalogDto> increaseStock(List<String> productIds) {
+        List<CatalogEntity> catalogEntity = catalogRepository.findByProductIdIn(productIds);
 
         if (catalogEntity == null) {
             throw new EntityNotFoundException("Product not found");
         }
 
-        catalogEntity.increaseStock(stock);
+        catalogEntity.forEach(entities -> entities.increaseStock(1));
 
-        return convertEntityToDto(catalogEntity);
+        return catalogEntity.stream().map(this::convertEntityToDto).toList();
     }
 
     @Override
     @Transactional
-    public CatalogDto decreaseStock(String productId, Integer stock) {
-        CatalogEntity catalogEntity = catalogRepository.findByProductId(productId);
+    public List<CatalogDto> decreaseStock(List<String> productIds) {
+        List<CatalogEntity> catalogEntity = catalogRepository.findByProductIdIn(productIds);
 
         if (catalogEntity == null) {
             throw new EntityNotFoundException("Product not found");
         }
 
-        if (stock < 1) {
-            throw new InvalidStockQuantityException("stock must be at least 1");
-        }
+        catalogEntity.forEach(entities -> entities.decreaseStock(1));
 
-        catalogEntity.decreaseStock(stock);
-
-        return convertEntityToDto(catalogEntity);
+        return catalogEntity.stream().map(this::convertEntityToDto).toList();
     }
 
     @Override
