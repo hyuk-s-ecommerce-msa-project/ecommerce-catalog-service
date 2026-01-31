@@ -1,5 +1,6 @@
 package com.ecommerce.catalog_service.service;
 
+import com.ecommerce.catalog_service.client.KeyInventoryClient;
 import com.ecommerce.catalog_service.dto.SteamAppListResponse;
 import com.ecommerce.catalog_service.entity.CatalogEntity;
 import com.ecommerce.catalog_service.repository.CatalogRepository;
@@ -22,6 +23,7 @@ public class SteamApiService {
     private final CatalogRepository catalogRepository;
     private final RestTemplate restTemplate = new RestTemplate();
     private final Environment env;
+    private final KeyInventoryClient keyInventoryClient;
 
     @Transactional
     public List<SteamAppListResponse.SteamAppDto> fetchSteamApps() {
@@ -68,13 +70,15 @@ public class SteamApiService {
         }
         String releaseDate = (apiData.getReleaseDate() != null) ? apiData.getReleaseDate().getDate() : "";
 
+        long stock = keyInventoryClient.getKeys().stream().filter(key -> key.getProductId().equals(productId)).count();
+
         CatalogEntity foundEntity = catalogRepository.findByProductId(productId);
         if (foundEntity == null) {
             foundEntity = CatalogEntity.createCatalog(
                     productId,
                     apiData.getName(),
                     finalPrice,
-                    100,
+                    (int) stock,
                     apiData.getHeaderImage(),
                     apiData.getDetailedDescription(),
                     releaseDate
