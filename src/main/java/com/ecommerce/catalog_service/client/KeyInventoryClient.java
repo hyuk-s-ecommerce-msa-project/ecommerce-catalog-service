@@ -8,6 +8,6 @@ import java.util.List;
 
 @FeignClient(name = "key-inventory-service")
 public interface KeyInventoryClient {
-    @GetMapping("key-inventory/keys")
+    @GetMapping("/key-inventory/keys")
     List<ResponseKeys> getKeys();
 }
