@@ -5,17 +5,12 @@ import com.ecommerce.catalog_service.entity.CatalogEntity;
 import com.ecommerce.catalog_service.exception.InvalidStockQuantityException;
 import com.ecommerce.catalog_service.repository.CatalogRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
