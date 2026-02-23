@@ -55,14 +55,14 @@ public class CatalogController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PostMapping("/catalogs/stock/decrease")
-    public ResponseEntity<List<ResponseCatalog>> decreaseStock(@RequestBody List<String> productIds) {
-        List<CatalogDto> catalogDto = catalogService.decreaseStock(productIds);
-
-        List<ResponseCatalog> response = catalogDto.stream().map(dto -> modelMapper.map(dto, ResponseCatalog.class)).toList();
-
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
+//    @PostMapping("/catalogs/stock/decrease")
+//    public ResponseEntity<List<ResponseCatalog>> decreaseStock(@RequestBody List<String> productIds) {
+//        List<CatalogDto> catalogDto = catalogService.decreaseStock(productIds);
+//
+//        List<ResponseCatalog> response = catalogDto.stream().map(dto -> modelMapper.map(dto, ResponseCatalog.class)).toList();
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(response);
+//    }
 
     @GetMapping("/catalogs/{productId}")
     public ResponseEntity<ResponseCatalog> getCatalog(@PathVariable("productId") String productId) {

@@ -4,6 +4,7 @@ import com.ecommerce.catalog_service.client.KeyInventoryClient;
 import com.ecommerce.catalog_service.dto.SteamAppListResponse;
 import com.ecommerce.catalog_service.entity.CatalogEntity;
 import com.ecommerce.catalog_service.repository.CatalogRepository;
+import com.ecommerce.catalog_service.service.connector.InternalServiceConnector;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ public class SteamApiService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final Environment env;
     private final KeyInventoryClient keyInventoryClient;
+    private final InternalServiceConnector internalConnector;
 
     @Transactional
     public List<SteamAppListResponse.SteamAppDto> fetchSteamApps() {
@@ -70,7 +72,8 @@ public class SteamApiService {
         }
         String releaseDate = (apiData.getReleaseDate() != null) ? apiData.getReleaseDate().getDate() : "";
 
-        long stock = keyInventoryClient.getKeys().stream().filter(key -> key.getProductId().equals(productId)).count();
+//        long stock = keyInventoryClient.getKeys().stream().filter(key -> key.getProductId().equals(productId)).count();
+        long stock = internalConnector.getKeys().stream().filter(key -> key.getProductId().equals(productId)).count();
 
         CatalogEntity foundEntity = catalogRepository.findByProductId(productId);
         if (foundEntity == null) {
