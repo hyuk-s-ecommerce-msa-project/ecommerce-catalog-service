@@ -5,6 +5,7 @@ import com.ecommerce.catalog_service.dto.SteamAppListResponse;
 import com.ecommerce.catalog_service.entity.CatalogEntity;
 import com.ecommerce.catalog_service.repository.CatalogRepository;
 import com.ecommerce.catalog_service.service.connector.InternalServiceConnector;
+import com.ecommerce.snowflake.util.SnowflakeIdGenerator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ public class SteamApiService {
     private final Environment env;
     private final KeyInventoryClient keyInventoryClient;
     private final InternalServiceConnector internalConnector;
+    private final SnowflakeIdGenerator snowflakeIdGenerator;
 
     @Transactional
     public List<SteamAppListResponse.SteamAppDto> fetchSteamApps() {
@@ -75,9 +77,12 @@ public class SteamApiService {
 //        long stock = keyInventoryClient.getKeys().stream().filter(key -> key.getProductId().equals(productId)).count();
         long stock = internalConnector.getKeys().stream().filter(key -> key.getProductId().equals(productId)).count();
 
+        Long snowflakeId = snowflakeIdGenerator.nextId();
+
         CatalogEntity foundEntity = catalogRepository.findByProductId(productId);
         if (foundEntity == null) {
             foundEntity = CatalogEntity.createCatalog(
+                    snowflakeId,
                     productId,
                     apiData.getName(),
                     finalPrice,
@@ -95,13 +100,24 @@ public class SteamApiService {
         entityToUpdate.clearCollections();
 
         if (apiData.getScreenshots() != null) {
-            apiData.getScreenshots().forEach(s -> entityToUpdate.addImage(s.getPathFull()));
+            apiData.getScreenshots().forEach(s -> {
+                Long imageSnowflakeId = snowflakeIdGenerator.nextId();
+                entityToUpdate.addImage(imageSnowflakeId, s.getPathFull());
+            });
         }
+
         if (apiData.getGenres() != null) {
-            apiData.getGenres().forEach(g -> entityToUpdate.addGenre(g.getDescription()));
+            apiData.getGenres().forEach(g -> {
+                Long genreSnowflakeId = snowflakeIdGenerator.nextId();
+                entityToUpdate.addGenre(genreSnowflakeId, g.getDescription());
+            });
         }
+
         if (apiData.getCategories() != null) {
-            apiData.getCategories().forEach(c -> entityToUpdate.addCategory(c.getDescription()));
+            apiData.getCategories().forEach(c -> {
+                Long categorySnowflakeId = snowflakeIdGenerator.nextId();
+                entityToUpdate.addCategory(categorySnowflakeId, c.getDescription());
+            });
         }
 
         catalogRepository.save(entityToUpdate);

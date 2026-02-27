@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CatalogImageEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 500)
@@ -21,9 +20,10 @@ public class CatalogImageEntity {
     @JoinColumn(name = "catalog_id")
     private CatalogEntity catalog;
 
-    public static CatalogImageEntity create(String imageUrl, CatalogEntity catalog) {
+    public static CatalogImageEntity create(Long id, String imageUrl, CatalogEntity catalog) {
         CatalogImageEntity image = new CatalogImageEntity();
 
+        image.id = id;
         image.imageUrl = imageUrl;
         image.catalog = catalog;
 

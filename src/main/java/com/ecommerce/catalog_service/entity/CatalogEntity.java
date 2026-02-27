@@ -19,7 +19,6 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CatalogEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 120, unique = true)
@@ -66,9 +65,11 @@ public class CatalogEntity {
         this.stock += qty;
     }
 
-    public static CatalogEntity createCatalog(String productId, String productName, Integer price,
+    public static CatalogEntity createCatalog(Long id, String productId, String productName, Integer price,
                                               Integer stock, String headerImage, String detailDescription, String releaseDate) {
         CatalogEntity catalog = new CatalogEntity();
+
+        catalog.id = id;
         catalog.productId = productId;
         catalog.productName = productName;
         catalog.price = price;
@@ -86,16 +87,16 @@ public class CatalogEntity {
         this.releaseDate = releaseDate;
     }
 
-    public void addImage(String imageUrl) {
-        this.images.add(CatalogImageEntity.create(imageUrl, this));
+    public void addImage(Long id, String imageUrl) {
+        this.images.add(CatalogImageEntity.create(id, imageUrl, this));
     }
 
-    public void addGenre(String genreName) {
-        this.genres.add(CatalogGenreEntity.create(genreName, this));
+    public void addGenre(Long id, String genreName) {
+        this.genres.add(CatalogGenreEntity.create(id, genreName, this));
     }
 
-    public void addCategory(String categoryName) {
-        this.categories.add(CatalogCategoryEntity.create(categoryName, this));
+    public void addCategory(Long id, String categoryName) {
+        this.categories.add(CatalogCategoryEntity.create(id, categoryName, this));
     }
 
     public void clearCollections() {

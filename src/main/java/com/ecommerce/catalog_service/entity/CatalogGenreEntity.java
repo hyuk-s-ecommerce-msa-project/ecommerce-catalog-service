@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CatalogGenreEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -21,8 +20,10 @@ public class CatalogGenreEntity {
     @JoinColumn(name = "catalog_id")
     private CatalogEntity catalog;
 
-    public static CatalogGenreEntity create(String genreName, CatalogEntity catalog) {
+    public static CatalogGenreEntity create(Long id, String genreName, CatalogEntity catalog) {
         CatalogGenreEntity genre = new CatalogGenreEntity();
+
+        genre.id = id;
         genre.genreName = genreName;
         genre.catalog = catalog;
         return genre;
