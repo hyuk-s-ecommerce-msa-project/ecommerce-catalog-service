@@ -13,7 +13,7 @@ public class CatalogCategoryEntity {
     @Id
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String categoryName;
 
     @ManyToOne(fetch = FetchType.LAZY)

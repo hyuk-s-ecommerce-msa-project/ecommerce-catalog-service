@@ -13,7 +13,7 @@ public class CatalogImageEntity {
     @Id
     private Long id;
 
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, length = 1000)
     private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)

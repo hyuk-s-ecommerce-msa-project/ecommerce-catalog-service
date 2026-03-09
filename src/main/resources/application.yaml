@@ -1,8 +1,16 @@
 server:
+  tomcat:
+    threads:
+      max: 300
+      min-spare: 50
   port: 0
 
 spring:
   datasource:
+    hikari:
+      idle-timeout: 600000
+      leak-detection-threshold: 2000
+      maximum-pool-size: 80
     url: jdbc:mariadb://localhost:3306/gameinfo_catalog
   application:
     name: catalog-service
@@ -26,12 +34,12 @@ spring:
       path: /h2-console
   jpa:
     hibernate:
-      ddl-auto: create
-    show-sql: true
+      ddl-auto: update
+    show-sql: false
     properties:
       hibernate:
         use_id_generator_strategy_three_lo: false
-        format_sql: true
+        format_sql: false
         dialect: org.hibernate.dialect.MariaDBDialect
 
 eureka:
@@ -43,17 +51,14 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
 
-logging:
-  level:
-    org.springframework.security: DEBUG
-
 management:
   tracing:
     sampling:
-      probability: 1.0
+      probability: 0.1
     enabled: true
   zipkin:
     tracing:
+      enabled: false
       endpoint: http://localhost:9411/api/v2/spans
   endpoints:
     web:
